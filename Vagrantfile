@@ -23,6 +23,10 @@ Vagrant.configure("2") do |config|
     vb.memory = "1024"
   end
   
+  # Make vagrant run setup.sh file for automates our enviorment
+  config.vm.provision "shell", path: "setup.sh", privileged: false
+  
+  
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
