@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'dogowner.apps.DogOwnerConfig',
     'daycare.apps.DayCareConfig',
-    'review.apps.ReviewConfig'
+    'review.apps.ReviewConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
