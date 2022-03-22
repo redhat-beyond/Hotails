@@ -49,6 +49,10 @@ A step by step series that tell you how to get Hotails up and running
 * Yuval Vinokur
 * Jenia Sakirko
 
+## Contributing
+
+Please see our [CONTRIBUTING.md](Contributing.md) file for details on how to contribute to the Hotails community.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
