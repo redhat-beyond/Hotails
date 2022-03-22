@@ -41,8 +41,8 @@ A step by step series that tell you how to get Hotails up and running
 * [Virtual-Box](https://www.virtualbox.org/) - VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product for
   enterprise as well as home use
 
-### Data Flow Diagram
-See the [data flow diagram](resources/documents/README.md)
+### Data Diagrams
+See the [diagrams](resources/documents/README.md)
 
 ## Team Members
 
