@@ -6,7 +6,7 @@ This file will include all the diagrams that relevant to this project
 ![](HotailsDataFlowDiagram.png)
 
 ## ERD Diagram
-![](Hotails Database ERD.png)
+![](HotailsDatabaseERD.png)
 
 ### Contributing to the DFD/ERD
 1. Use the .vsdx file and update the relevant information
