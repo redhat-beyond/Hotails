@@ -10,6 +10,9 @@ cd /vagrant
 # Install dependencies with Pipenv
 pipenv sync --dev
 
+# Run database migrations
+pipenv run python manage.py migrate
+
 # run our app. setsit, the parentheses and "&" are used to perform a "double
 # fork" so that out app stays up after the setup script finishes.
 # The app logs are redirected to the `runserver.log` file.
