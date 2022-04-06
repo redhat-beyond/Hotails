@@ -3,8 +3,11 @@ from django.contrib.auth.models import User
 from .validators import validate_username_already_exist
 from .validators import validate_max_length
 from .validators import validate_price
+from .validators import validate_url_is_image
+from .validators import validate_if_daycare_exists
 from django.core.validators import validate_email
 from django.core.validators import MaxLengthValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class DayCare(models.Model):
@@ -18,7 +21,14 @@ class DayCare(models.Model):
     address = models.CharField(max_length=50, blank=True, validators=[MaxLengthValidator])
 
     def __str__(self):
-        return self.name
+        return f'{self.name} name'
+
+    @staticmethod
+    def get_daycare_by_id(daycare_id):
+        try:
+            return DayCare.objects.filter(daycare_id=daycare_id)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
     def create(email, username, password, name, description, price_per_day, capacity, area, city, address):
@@ -39,3 +49,26 @@ class DayCare(models.Model):
         new_daycare.save()
 
         return new_daycare
+
+
+class Image(models.Model):
+    url = models.CharField(max_length=1000)
+    daycare_id = models.ForeignKey(DayCare, on_delete=models.CASCADE,
+                                   default=None, blank=True, null=False, editable=True)
+
+    @classmethod
+    def create(cls, url, daycare_id):
+        validate_url_is_image(url)
+        validate_if_daycare_exists(daycare_id.id)
+
+        new_image = Image(url=url, daycare_id=daycare_id)
+        new_image.save()
+
+        return new_image
+
+    @staticmethod
+    def get_images_by_daycare_id(daycare_id):
+        try:
+            return Image.objects.filter(daycare_id=daycare_id)
+        except ObjectDoesNotExist:
+            return None
