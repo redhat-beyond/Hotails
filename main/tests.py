@@ -1,4 +1,5 @@
 import pytest
+from daycare.models import DayCare
 
 
 @pytest.mark.django_db
@@ -64,8 +65,15 @@ class TestIndexView:
         assert response['Location'] == '/homepage/'
 
 
+@pytest.mark.django_db
 class TestHomepageView:
     def test_unlogged_user_access_to_homepage(self, client):
         response = client.get("/homepage/")
         assert response.status_code == 302
         assert response['Location'] == '/login/?next=/homepage/'
+
+    def test_dog_owner_homepage_is_visible_for_dog_owner(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/homepage/")
+        assert response.status_code == 200
+        assert list(response.context['daycares']) == list(DayCare.objects.all())

@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import logout
-from daycare.models import DayCare
 from dogowner.models import DogOwner
+from daycare.models import DayCare
+from dogowner.views import dog_owner_home
 from daycare.views import daycare_home
 
 
@@ -16,7 +17,7 @@ def index(request):
 @login_required()
 def homepage(request):
     if DogOwner.objects.filter(user=request.user).exists():
-        return render(request, 'main/homepage.html')
+        return dog_owner_home(request)
     elif DayCare.objects.filter(user=request.user).exists():
         return daycare_home(request)
 
