@@ -1,0 +1,59 @@
+.container {
+    display: flex; align-items: stretch;
+}
+
+.container div {
+    margin: 0 auto;
+}
+
+#block-1-col-1 {
+    flex: 1; text-align: center; margin-top: 75px;
+}
+#block-1-col-2 {
+    flex: 1;
+}
+
+#block-2-col-1 {
+    flex: 1;
+}
+
+#block-2-col-2 {
+    flex: 1; margin-top:30px
+}
+
+#block-3-col-1 {
+    flex: 1; margin-top:30px
+}
+
+#block-3-col-2 {
+      flex: 1;
+  }
+
+.space-between-containers{
+    height: 30px;
+    background-color: rgb(30,129,176);
+}
+
+#welcome-h1{
+    text-align: center; font-size: 300%;
+}
+
+#welcome-description{
+    position: relative;
+    bottom: 20px;
+    font-size: large;
+}
+
+img{
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block; }
+
+ul li {
+    font-size:1.2rem
+}
+
+#welcome-description {
+    font-size:1.5rem
+}
