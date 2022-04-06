@@ -1,0 +1,29 @@
+header ul li {
+    font-size: 1.1rem;
+}
+
+.navbar-profile-img
+{
+    border-radius: 50%;
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+#welcomeMsg {
+    padding-left:10px;
+    padding-bottom:0;
+    margin-top:5px;
+    color:#FFF;
+    float:left;
+}
+
+#logoutHref {
+    background-color:#1e1e1e;
+    border-radius:12px;
+    color:#E19512;
+    font-weight:bold;
+    float:right;
+    padding: 5px 10px 5px 10px;
+    font-size:1rem;
+    margin:1px 0 0 20px;
+}

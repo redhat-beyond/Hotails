@@ -1,4 +1,5 @@
-from .models import DogOwner
+from conftest import DOG_OWNER_FIXTURE_PROFILE_PICTURE_URL
+from .models import DogOwner, DOG_OWNER_DEFAULT_PROFILE_PICTURE_URL
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .validators import MaxLength
@@ -163,3 +164,12 @@ class TestDogOwnerModel:
                             dog_picture_url="https://www.not/an/image.com",
                             dog_age=10, dog_weight=6, dog_gender='M'
                             )
+
+    def test_dogowner_has_customized_profile_image(self, create_dog_owner_user: DogOwner):
+        dogowner_profile_image = create_dog_owner_user.get_dog_owner_profile_image_url()
+        assert dogowner_profile_image == DOG_OWNER_FIXTURE_PROFILE_PICTURE_URL
+
+    def test_dogowner_has_default_profile_image(self, create_dog_owner_user: DogOwner):
+        create_dog_owner_user.dog_picture_url = None
+        dogowner_profile_image = create_dog_owner_user.get_dog_owner_profile_image_url()
+        assert dogowner_profile_image == DOG_OWNER_DEFAULT_PROFILE_PICTURE_URL
