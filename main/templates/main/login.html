@@ -1,0 +1,38 @@
+{% extends "main/base_template.html" %}
+{% load crispy_forms_tags %}
+{%  load static %}
+
+{% block stylesheets %}
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <title>Hotails.com - Login!</title>
+{% endblock %}
+
+{% block content %}
+
+    <section>
+        <div class="text-box">
+            <h1>Login now!</h1>
+            <div class="card" style="color: rgb(0, 0, 0); background: rgba(252, 252, 252, 0.3); width: 500px;">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            {{form|crispy}}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-3" type="submit">Lets Go!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+    crossorigin="anonymous"></script>
+
+{% endblock %}
