@@ -21,7 +21,7 @@ class DayCare(models.Model):
     address = models.CharField(max_length=50, blank=True, validators=[MaxLengthValidator])
 
     def __str__(self):
-        return f'{self.name} name'
+        return f'Daycare name: {self.name}'
 
     @staticmethod
     def get_daycare_by_id(daycare_id):
