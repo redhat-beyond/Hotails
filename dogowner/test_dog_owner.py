@@ -12,7 +12,7 @@ FIRST_NAME = 'NEW'
 LAST_NAME = 'USER'
 PHONE_NUMBER = 1234567890
 DOG_RACE = 'lavrador'
-DOG_PICTURE_URL = 'https://www.google.com/'
+DOG_PICTURE_URL = "https://www.akc.org/wp-content/uploads/2019/06/Bohemian-Shepherd.1.jpg"
 DOG_AGE = 10
 DOG_WEIGHT = 6
 DOG_GENDER = 'M'
@@ -59,17 +59,9 @@ class TestDogOwnerModel:
 
     def test_dog_owner_user_creation_with_invalid_email(self):
         with pytest.raises(ValidationError, match="'Enter a valid email address.'", ):
-            DogOwner.create(email='INVALID_EMAIL', username='testuser02', password=PASSWORD,
+            DogOwner.create(email='INVALID_EMAIL', username='testuser04', password=PASSWORD,
                             dog_name=DOG_NAME, first_name=FIRST_NAME, last_name=LAST_NAME,
                             phone_number=PHONE_NUMBER, dog_race=DOG_RACE, dog_picture_url=DOG_PICTURE_URL,
-                            dog_age=DOG_AGE, dog_weight=DOG_WEIGHT, dog_gender=DOG_GENDER
-                            )
-
-    def test_dog_owner_user_creation_with_invalid_dog_picture_url(self):
-        with pytest.raises(ValidationError, match="Enter a valid URL."):
-            DogOwner.create(email=EMAIL, username='testuser04', password=PASSWORD,
-                            dog_name=DOG_NAME, first_name=FIRST_NAME, last_name=LAST_NAME,
-                            phone_number=PHONE_NUMBER, dog_race=DOG_RACE, dog_picture_url='NOT_A_URL',
                             dog_age=DOG_AGE, dog_weight=DOG_WEIGHT, dog_gender=DOG_GENDER
                             )
 
@@ -176,5 +168,15 @@ class TestDogOwnerModel:
             DogOwner.create(email=EMAIL, username='testuser15', password=PASSWORD,
                             dog_name='DOGNAME1', first_name=FIRST_NAME, last_name=LAST_NAME,
                             phone_number=PHONE_NUMBER, dog_race=DOG_RACE, dog_picture_url=DOG_PICTURE_URL,
+                            dog_age=DOG_AGE, dog_weight=DOG_WEIGHT, dog_gender=DOG_GENDER
+                            )
+
+    def test_dog_owner_user_creation_with_url_not_an_image(self):
+        with pytest.raises(ValidationError,
+                           match="""Invalid  image URL  - URL should end with '.png', '.jpg' or '.jpeg'."""):
+            DogOwner.create(email=EMAIL, username='testuser17', password=PASSWORD,
+                            dog_name=DOG_NAME, first_name=FIRST_NAME, last_name=LAST_NAME,
+                            phone_number=PHONE_NUMBER, dog_race=DOG_RACE,
+                            dog_picture_url="https://www.not/an/image.com",
                             dog_age=DOG_AGE, dog_weight=DOG_WEIGHT, dog_gender=DOG_GENDER
                             )

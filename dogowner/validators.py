@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.validators import URLValidator, validate_email
+from django.core.validators import validate_email
 from enum import Enum
 
 
@@ -36,7 +36,7 @@ class ValidateDogOwner:
         self.validate_dog_owner_username_unique()
         self.validate_dog_gender()
         validate_email(self.email)
-        validate_url(self.dog_picture_url)
+        validate_url_is_image(self.dog_picture_url)
         validate_phone(self.phone_number)
         validate_max_length(self.dog_picture_url, MaxLength['DOG_PICTURE_URL'].value, "DOG_PICTURE_URL")
         for i, s in enumerate([self.first_name, self.last_name, self.dog_name, self.dog_race]):
@@ -55,10 +55,10 @@ class ValidateDogOwner:
             raise ValidationError("Invalid gender - please choose 'M','F' or 'UN.")
 
 
-def validate_url(url):
-    if url:
-        validator = URLValidator()
-        validator(url)
+def validate_url_is_image(url):
+    img_extenstion = (".png", ".jpg", ".jpeg")
+    if not url.endswith(img_extenstion):
+        raise ValidationError("""Invalid  image URL  - URL should end with '.png', '.jpg' or '.jpeg'.""")
 
 
 def validate_phone(value):

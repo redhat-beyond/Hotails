@@ -11,11 +11,11 @@ class Migration(migrations.Migration):
 
         test_data = [
             ('user1@address.com', 'testUser1', 'password123', 'dog name', 'first name', 'last name',
-             1234567890, 'dog race', 'https://www.google.com/user1', 4, 2, 'M'),
+             1234567890, 'dog race', 'https://www.google.com/user1.jpg', 4, 2, 'M'),
             ('user2@address.com', 'testUser2', 'password123', 'dog name', 'first name', 'last name',
-             1234567890, 'dog race', 'https://www.google.com/user2', 3, 1, 'M'),
+             1234567890, 'dog race', 'https://www.google.com/user2.jpg', 3, 1, 'M'),
             ('user3@address.com', 'testUser3', 'password123', 'dog name', 'first name', 'last name',
-             1234567890, 'dog race', 'https://www.google.com/user3', 2, 5, 'M'),
+             1234567890, 'dog race', 'https://www.google.com/user3.jpg', 2, 5, 'M'),
         ]
 
         with transaction.atomic():
