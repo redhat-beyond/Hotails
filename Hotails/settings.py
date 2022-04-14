@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'daycare.apps.DayCareConfig',
     'review.apps.ReviewConfig',
     'orders.apps.OrdersConfig',
+    'message.apps.MessageConfig',
 ]
 
 MIDDLEWARE = [
