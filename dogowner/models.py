@@ -16,7 +16,7 @@ class DogOwner(models.Model):
     phone_number = models.IntegerField(null=True, blank=True)
     dog_name = models.CharField(max_length=MaxLength['DOG_NAME'].value, blank=True)
     dog_race = models.CharField(max_length=MaxLength['DOG_RACE'].value, blank=True)
-    dog_picture_url = models.CharField(max_length=MaxLength['DOG_PICTURE_URL'].value, blank=True)
+    dog_picture_url = models.URLField(max_length=MaxLength['DOG_PICTURE_URL'].value, blank=True)
     dog_age = models.IntegerField(null=True, blank=True)
     dog_weight = models.FloatField(null=True, blank=True)
     dog_gender = models.CharField(
@@ -25,7 +25,7 @@ class DogOwner(models.Model):
         default='UN', blank=True)
 
     def __str__(self):
-        return self.first_name + self.last_name
+        return self.first_name + ' ' + self.last_name
 
     @staticmethod
     def create(email, username, password, dog_name,
