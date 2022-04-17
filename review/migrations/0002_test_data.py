@@ -9,8 +9,6 @@ class Migration(migrations.Migration):
     ]
 
     def generate_data(apps, schema_editor):
-        from daycare.models import DayCare
-        from dogowner.models import DogOwner
         from review.models import Review
         test_data = [
             ('review 1', 1, 1, 1),
@@ -23,8 +21,7 @@ class Migration(migrations.Migration):
 
         with transaction.atomic():
             for review, rating, day_care_id, dog_owner_id in test_data:
-                Review(review=review, rating=rating, daycare_id=DayCare.objects.get(pk=day_care_id),
-                       dogowner_id=DogOwner.objects.get(pk=dog_owner_id)).save()
+                Review.create(review=review, rating=rating, daycare_id=day_care_id, dogowner_id=dog_owner_id)
 
     operations = [
         migrations.RunPython(generate_data),
