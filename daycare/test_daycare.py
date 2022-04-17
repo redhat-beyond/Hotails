@@ -3,6 +3,7 @@ from .models import DayCare
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
+
 EMAIL = "test@gmail.com"
 USERNAME = "testuser01"
 PASSWORD = "pass"
@@ -13,14 +14,6 @@ CAPACITY = 50
 AREA = "Merkaz"
 CITY = "Tel-Aviv"
 ADDRESS = "The best street 5"
-
-
-@pytest.fixture
-def create_daycare_user():
-    return DayCare.create(email=EMAIL, username=USERNAME, password=PASSWORD,
-                          name=NAME, description=DESCRIPTION,
-                          price_per_day=PRICE_PER_DAY,
-                          capacity=CAPACITY, area=AREA, city=CITY, address=ADDRESS)
 
 
 @pytest.mark.django_db()
