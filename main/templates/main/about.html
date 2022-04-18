@@ -1,0 +1,54 @@
+{% extends "main/base_template.html" %}
+{% load static %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'CSS/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container">
+        <div id="block-1-col-1">
+            <h1 id="welcome-h1">Welcome to Hotails!</h1>
+            <p id="welcome-description">An online marketplace that provides both for dogs owners and dog daycares
+                managers, an efficient,
+                comfortable, and reliable system.</p>
+        </div>
+        <div id="block-1-col-2">
+            <img src="{% static 'images\Hotails-logo.jpg' %}" alt="Hotails-logo">
+        </div>
+    </section>
+    <section class="space-between-containers"></section>
+    <section class="container">
+        <div id="block-2-col-1">
+            <img src="{% static 'images\Puppy.jpg' %}" alt="Puppy">
+
+        </div>
+        <div id="block-2-col-2">
+            <h1>As a dog owner:</h1>
+            <ul>
+                <li>Create a custom profile for your puppy</li>
+                <li>Find the best daycare for your four-legged buddy, with filters!</li>
+                <li>Read / write reviews of daycares</li>
+                <li>Watch the history of visited daycares/li>
+                <li>Chat with daycare owners</li>
+            </ul>
+        </div>
+    </section>
+    <section class="space-between-containers"></section>
+    <section class="container">
+        <div id="block-3-col-1">
+            <h1>As a daycare owner:</h1>
+            <ul>
+                <li>Manage your booking schedule</li>
+                <li>Set filters of approved dogs and services you provide</li>
+                <li>Read / write reviews of dog owners and their dogs</li>
+                <li>Chat with dog owners</li>
+            </ul>
+        </div>
+        <div id="block-3-col-2">
+            <img src="{% static 'images\Dog-Head-Wall.jpg' %}" alt="Dog-Head-Wall">
+        </div>
+    </section>
+
+{% endblock %}
