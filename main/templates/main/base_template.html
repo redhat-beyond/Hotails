@@ -23,15 +23,19 @@
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         </button>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link text-white" href="">Profile</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="">Orders</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="">Search</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="">Chats</a></li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-white" href="">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="">Search</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="">Chats</a></li>
+                {% endif %}
                 <li class="nav-item"><a class="nav-link text-white" href="/about">About</a></li>
             </ul>
+        {% if request.user.is_authenticated %}
         <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item"><a class="nav-link text-white" style="font-size:1.3rem" href="#">Logout</a></li>
+            <li class="nav-item"><a class="nav-link text-white" style="font-size:1.3rem" href="/logout">Logout</a></li>
         </ul>
+        {% endif %}
     </nav>
 </header>
 
