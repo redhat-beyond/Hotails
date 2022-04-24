@@ -34,17 +34,6 @@ class TestLoginView:
         response = client.get('/login/')
         assert response.status_code == 200
 
-    def test_valid_login_dog_owner_user_info(self, client, create_dog_owner_user):
-        previous_logged_user = client.get('/').wsgi_request.user
-        form = {'username': 'dogOwnerUser01',
-                'password': 'password123',
-                }
-
-        response = client.post('/login/', form, follow=True)
-        current_log_user = response.wsgi_request.user
-        assert current_log_user == create_dog_owner_user.user
-        assert previous_logged_user != current_log_user
-
     def test_invalid_login_dog_owner_user_info(self, client):
         form = {'username': "daycare@address.com",
                 'password': "incorrect",
