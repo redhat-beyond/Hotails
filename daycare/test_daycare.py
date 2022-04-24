@@ -61,3 +61,9 @@ class TestDaycareModel:
             DayCare.create(username='testUser01', email="valid@gmail.com", password='pass123', name='daycare',
                            description='new description', price_per_day=10, capacity=50,
                            area='north', city='haifa', address='new address')
+
+    def test_daycare_redirected_homepage_after_login(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get('/')
+        assert response.status_code == 302
+        assert response['Location'] == '/homepage/'

@@ -3,6 +3,9 @@ from .models import DayCare
 from .models import Image
 from django.core.exceptions import ValidationError
 
+TEST_IMAGE_URL_01 = "../../static/images/daycare_image_test_01.jpeg"
+TEST_IMAGE_URL_02 = "../../static/images/daycare_image_test_02.jpeg"
+
 
 @pytest.mark.django_db()
 class TestImageModel:

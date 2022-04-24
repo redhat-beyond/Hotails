@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'daycare.apps.DayCareConfig',
     'review.apps.ReviewConfig',
     'orders.apps.OrdersConfig',
-    'message.apps.MessageConfig',
     'crispy_forms',
+    'message.apps.MessageConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +121,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

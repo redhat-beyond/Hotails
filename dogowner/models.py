@@ -25,7 +25,7 @@ class DogOwner(models.Model):
         default='UN', blank=True)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return f'{self.first_name} {self.last_name}'
 
     @staticmethod
     def create(email, username, password, dog_name,
