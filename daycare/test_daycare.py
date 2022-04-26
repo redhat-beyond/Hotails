@@ -2,6 +2,9 @@ import pytest
 from .models import DayCare
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from .models import Image
+import random
+from review.models import Review
 
 
 @pytest.mark.django_db()
@@ -61,3 +64,26 @@ class TestDaycareModel:
             DayCare.create(username='testUser01', email="valid@gmail.com", password='pass123', name='daycare',
                            description='new description', price_per_day=10, capacity=50,
                            area='north', city='haifa', address='new address')
+
+    def test_daycare_redirected_homepage_after_login(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get('/')
+        assert response.status_code == 302
+        assert response['Location'] == '/homepage/'
+
+    def test_relevant_daycare_homepage_with_static_data(self, client, create_daycare_user):
+        dayCare = random.choice([daycare for daycare in DayCare.objects.all() if 'static' in daycare.user.username])
+        client.force_login(user=dayCare.user)
+
+        response = client.get('/homepage/')
+
+        daycare_shown_in_homepage = response.context['daycare']
+        assert daycare_shown_in_homepage == dayCare
+
+        images_shown_in_homepage = set(response.context['images'])
+        daycare_images = set(Image.get_images_by_daycare_id(daycare_id=dayCare.id))
+        assert images_shown_in_homepage == daycare_images
+
+        reviews_shown_in_homepage = set(response.context['reviews'])
+        daycare_reviews = set(Review.get_review_by_daycare_id(daycare_id=dayCare.id))
+        assert reviews_shown_in_homepage == daycare_reviews
