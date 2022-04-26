@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from dogowner.models import DogOwner
@@ -19,3 +20,10 @@ class Review(models.Model):
         tmp_review.full_clean()
         tmp_review.save()
         return tmp_review
+
+    @staticmethod
+    def get_review_by_daycare_id(daycare_id):
+        try:
+            return Review.objects.filter(daycare_id=daycare_id)
+        except ObjectDoesNotExist:
+            return None
