@@ -1,0 +1,60 @@
+.cards
+{
+    float:left;
+    margin: 0 0 0 5em;
+    position:relative;
+    width:100%;
+}
+
+#searchResult {
+    font-weight:bold;
+    position: relative;
+    left: 6.3em;
+    top:30px;
+}
+
+.card
+{
+    width: 330px;
+    height: 30rem;
+    float:left;
+    margin: 60px 20px 0 20px;
+}
+
+.card-body .btn
+{
+    margin-right: 50%;
+    margin-top: auto;
+}
+
+.card-img-top
+{
+    height: 200px;
+}
+
+#searchBoxArea {
+    background-color:#dcdcdc;
+    left:5em;
+    top: 5.2em;
+    max-width:100%;
+    padding: 2em 2em 2em 2em;
+}
+
+#searchBoxArea span {
+    font-weight:bold;
+    font-size:18px;
+    color:#3e3e3e;
+    padding: 5px 0 1em 0;
+    float:left;
+}
+
+#searchBoxArea input[type="submit"] {
+    background-color:#3e3e3e;
+    border: 0;
+    border-radius:12px;
+    color:#FFF;
+}
+
+#searchBoxArea input[type="submit"]:hover {
+    background-color:#1e1e1e;
+}
