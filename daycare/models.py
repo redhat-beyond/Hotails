@@ -10,13 +10,19 @@ from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ObjectDoesNotExist
 
 
+class Area(models.TextChoices):
+    North = 'N', 'NORTH'
+    South = 'S', 'SOUTH'
+    Center = 'C', 'CENTER'
+
+
 class DayCare(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None, blank=True, null=False, editable=True)
     name = models.CharField(max_length=20, blank=True, unique=True, validators=[MaxLengthValidator])
     description = models.TextField(blank=True, null=True)
     price_per_day = models.IntegerField(blank=False, null=False, default=0)
     capacity = models.IntegerField(null=False, blank=True)
-    area = models.CharField(max_length=20, blank=True, validators=[MaxLengthValidator])
+    area = models.CharField(max_length=20, blank=True, validators=[MaxLengthValidator], choices=Area.choices)
     city = models.CharField(max_length=20, blank=True, validators=[MaxLengthValidator])
     address = models.CharField(max_length=50, blank=True, validators=[MaxLengthValidator])
 
