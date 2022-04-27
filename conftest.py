@@ -76,7 +76,7 @@ def daycare_data():
     pytest.DESCRIPTION = "This is the first daycare test"
     pytest.PRICE_PER_DAY = 10
     pytest.CAPACITY = 50
-    pytest.AREA = "Merkaz"
+    pytest.AREA = "C"
     pytest.CITY = "Tel-Aviv"
     pytest.ADDRESS = "The best street 5"
 
