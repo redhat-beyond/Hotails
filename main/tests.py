@@ -1,4 +1,5 @@
 import pytest
+from orders.models import Order
 from daycare.models import DayCare
 
 
@@ -77,3 +78,28 @@ class TestHomepageView:
         response = client.get("/homepage/")
         assert response.status_code == 200
         assert list(response.context['daycares']) == list(DayCare.objects.all())
+
+
+@pytest.mark.django_db
+class TestOrdersView:
+    def test_only_orders_which_belongs_to_user_as_daycare_are_displayed(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get("/orders/")
+
+        response_orders_list = list(response.context['orders'])
+        all_orders_of_daycare_list = list(Order.objects.filter(daycare_id=create_daycare_user))
+        response_user = response.context['user']
+
+        assert response_user == 'daycare'
+        assert response_orders_list == all_orders_of_daycare_list
+
+    def test_only_orders_which_belongs_to_user_as_dog_owner_are_displayed(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/orders/")
+
+        response_orders_list = list(response.context['orders'])
+        all_orders_of_dog_owner_list = list(Order.objects.filter(dog_owner_id=create_dog_owner_user))
+        response_user = response.context['user']
+
+        assert response_user == 'dog_owner'
+        assert response_orders_list == all_orders_of_dog_owner_list
