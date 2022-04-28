@@ -1,4 +1,6 @@
 import pytest
+from orders.models import Order
+from daycare.models import DayCare
 
 
 @pytest.mark.django_db
@@ -69,3 +71,40 @@ class TestHomepageView:
         response = client.get("/homepage/")
         assert response.status_code == 302
         assert response['Location'] == '/login/?next=/homepage/'
+
+    def test_dog_owner_homepage_is_visible_for_dog_owner(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/homepage/")
+        assert response.status_code == 200
+        assert list(response.context['daycares']) == list(DayCare.objects.all())
+
+
+@pytest.mark.django_db
+class TestOrdersView:
+    def test_orders_page_is_visible_for_dog_owner_user(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/orders/")
+        assert response.status_code == 200
+
+    def test_orders_page_is_visible_for_daycare_user(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get("/orders/")
+        assert response.status_code == 200
+
+    def test_only_relevant_orders_are_displayed_for_daycare(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get("/orders/")
+        response_orders_list = list(response.context['orders'])
+        all_orders_of_daycare_list = list(Order.objects.filter(daycare_id=create_daycare_user))
+        assert response_orders_list == all_orders_of_daycare_list
+        response_user = response.context['user']
+        assert response_user == 'daycare'
+
+    def test_only_relevant_orders_are_displayed_for_dog_owner(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/orders/")
+        response_orders_list = list(response.context['orders'])
+        all_orders_of_dog_owner_list = list(Order.objects.filter(dog_owner_id=create_dog_owner_user))
+        assert response_orders_list == all_orders_of_dog_owner_list
+        response_user = response.context['user']
+        assert response_user == 'dog_owner'

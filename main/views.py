@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from daycare.models import DayCare
 from dogowner.models import DogOwner
 from daycare.views import daycare_home
+import orders.views
 
 
 def index(request):
@@ -28,3 +29,7 @@ def about(request):
 def logout_view(request):
     logout(request)
     return index(request)
+
+
+def orders_view(request):
+    return orders.views.orders(request)

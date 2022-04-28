@@ -52,3 +52,55 @@ class TestOrderModel:
     def test_daycare_id_is_deleted_when_daycare_is_deleted(self, create_order):
         DayCare.objects.get(id=1).delete()
         assert Order.objects.get(id=create_order.id).daycare_id is None
+
+    @pytest.mark.parametrize("dog_owner_1_id, dog_owner_2_id, delta_1, delta_2, capacity, expected_result",
+                             [(1, 2, 3, 5, 1, False),
+                              (2, 5, 4, 3, 10, True),
+                              (5, 4, 6, 7, 15, True),
+                              (4, 3, 4, 2, 1, False)])
+    def test_order_is_approvable_according_to_daycare_capacity(self, dog_owner_1_id, dog_owner_2_id, delta_1, delta_2,
+                                                               capacity, expected_result):
+        daycare = DayCare.create("capacity_email@gmail.com", "CapacityUserName", "CapacityPassword", "CapacityName",
+                                 "Changeable capacity", 100, capacity, "Merkaz", "Tel Aviv", "Capacity 123")
+        dog_owner_1 = DogOwner.objects.get(id=dog_owner_1_id)
+        dog_owner_2 = DogOwner.objects.get(id=dog_owner_2_id)
+
+        order1 = Order.create(start_date=timezone.now(), end_date=timezone.now() + datetime.timedelta(days=delta_1),
+                              daycare_id=daycare, dog_owner_id=dog_owner_1, price_per_day=100)
+        order2 = Order.create(start_date=timezone.now(), end_date=timezone.now() + datetime.timedelta(days=delta_2),
+                              daycare_id=daycare, dog_owner_id=dog_owner_2, price_per_day=100)
+
+        order1.approve_order()
+        assert order2.is_the_order_approvable() == expected_result
+
+    @pytest.mark.parametrize("new_status, expected_result", [(StatusOptions.Pending, True),
+                                                             (StatusOptions.Canceled, False),
+                                                             (StatusOptions.Approved, True),
+                                                             (StatusOptions.OnGoing, False),
+                                                             (StatusOptions.Finished, False)])
+    def test_order_cancellation_according_to_order_status(self, create_order, new_status, expected_result):
+        create_order.status = new_status
+        assert create_order.is_the_order_cancelable() == expected_result
+
+    @pytest.mark.parametrize("new_status, expected_result", [(StatusOptions.Pending, "Pending"),
+                                                             (StatusOptions.Canceled, "Canceled"),
+                                                             (StatusOptions.Approved, "Approved"),
+                                                             (StatusOptions.OnGoing, "Ongoing"),
+                                                             (StatusOptions.Finished, "Finished")])
+    def test_get_order_status_as_string(self, create_order, new_status, expected_result):
+        create_order.status = new_status
+        assert create_order.get_order_status() == expected_result
+
+    def test_get_daycare_capacity_in_dates_range(self, create_order):
+        original_capacity_list = Order.get_capacity_of_daycare_in_dates_range(create_order.daycare_id,
+                                                                              create_order.start_date,
+                                                                              create_order.end_date)
+        create_order.approve_order()
+        updated_capacity_list = Order.get_capacity_of_daycare_in_dates_range(create_order.daycare_id,
+                                                                             create_order.start_date,
+                                                                             create_order.end_date)
+        assert len(original_capacity_list) == len(updated_capacity_list)
+
+        equality_list = [updated_capacity_list[i] == original_capacity_list[i] + 1
+                         for i in range(len(original_capacity_list))]
+        assert equality_list.count(True) == len(equality_list)
