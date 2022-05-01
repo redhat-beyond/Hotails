@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+
 from dogowner.models import DogOwner
 from daycare.models import DayCare
 from dogowner.views import dog_owner_home
 from daycare.views import daycare_home
+import message.views
 
 
 def index(request):
@@ -29,3 +31,13 @@ def about(request):
 def logout_view(request):
     logout(request)
     return index(request)
+
+
+@login_required()
+def messages_view(request):
+    return message.views.messages(request)
+
+
+@login_required()
+def chat_view(request, contact):
+    return message.views.chat(request, contact)
