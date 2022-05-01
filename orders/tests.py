@@ -7,16 +7,6 @@ from .models import StatusOptions
 import pytest
 
 
-@pytest.fixture
-def create_order():
-    return Order.create(dog_owner_id=DogOwner.objects.get(id=1),
-                        daycare_id=DayCare.objects.get(id=1),
-                        start_date=timezone.now(),
-                        end_date=timezone.now() + datetime.timedelta(days=3),
-                        price_per_day=100,
-                        )
-
-
 @pytest.mark.django_db
 class TestOrderModel:
     def test_create_order(self, create_order):

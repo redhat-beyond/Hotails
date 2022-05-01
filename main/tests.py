@@ -1,22 +1,4 @@
 import pytest
-from dogowner.models import DogOwner
-
-
-@pytest.fixture
-def create_dog_owner_user():
-    return DogOwner.create(email='dogowner@address.com',
-                           username='dogOwnerUser01',
-                           password='password123',
-                           dog_name='dog name',
-                           first_name='test',
-                           last_name='user',
-                           phone_number=1234567890,
-                           dog_race='dog race',
-                           dog_picture_url='https://www.google.com/user1.jpg',
-                           dog_age=4,
-                           dog_weight=2,
-                           dog_gender='M'
-                           )
 
 
 @pytest.mark.django_db
@@ -34,28 +16,10 @@ class TestLoginView:
         response = client.get('/login/')
         assert response.status_code == 200
 
-    def test_valid_login_dog_owner_user_info(self, client, create_dog_owner_user):
+    def test_valid_login_daycare_user_info(self, client, create_daycare_user, daycare_data):
         previous_logged_user = client.get('/').wsgi_request.user
-        form = {'username': 'dogOwnerUser01',
-                'password': 'password123',
-                }
-
-        response = client.post('/login/', form, follow=True)
-        current_log_user = response.wsgi_request.user
-        assert current_log_user == create_dog_owner_user.user
-        assert previous_logged_user != current_log_user
-
-    def test_invalid_login_dog_owner_user_info(self, client):
-        form = {'username': "daycare@address.com",
-                'password': "incorrect",
-                }
-        response = client.post('/login/', form, follow=True)
-        assert response.wsgi_request.user.is_anonymous
-
-    def test_valid_login_daycare_user_info(self, client, create_daycare_user):
-        previous_logged_user = client.get('/').wsgi_request.user
-        form = {'username': 'testuser01',
-                'password': 'pass',
+        form = {'username': pytest.DAYCARE_USERNAME,
+                'password': pytest.DAYCARE_PASSWORD,
                 }
 
         response = client.post('/login/', form, follow=True)

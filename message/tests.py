@@ -1,40 +1,7 @@
 from .models import Message
 from dogowner.models import DogOwner
 from daycare.models import DayCare
-from .models import AuthorOptions
 import pytest
-
-
-@pytest.fixture
-def dogowner_message_to_daycare1():
-    return Message.create(author=AuthorOptions.DogOwner,
-                          dogowner_id=DogOwner.objects.get(pk=1),
-                          daycare_id=DayCare.objects.get(pk=1),
-                          text='Hello this is the test message1 from owner to day care')
-
-
-@pytest.fixture
-def daycare1_reply_to_dogonwer_message():
-    return Message.create(author=AuthorOptions.DayCare,
-                          dogowner_id=DogOwner.objects.get(pk=1),
-                          daycare_id=DayCare.objects.get(pk=1),
-                          text='This is reply to first message from daycare to owner')
-
-
-@pytest.fixture
-def daycare2_message_to_dogowner():
-    return Message.create(author=AuthorOptions.DayCare,
-                          dogowner_id=DogOwner.objects.get(pk=1),
-                          daycare_id=DayCare.objects.get(pk=2),
-                          text='Hello this new chat between daycare2 and dogowner')
-
-
-@pytest.fixture
-def daycare3_message_to_dogowner():
-    return Message.create(author=AuthorOptions.DayCare,
-                          dogowner_id=DogOwner.objects.get(pk=1),
-                          daycare_id=DayCare.objects.get(pk=3),
-                          text='new chat between daycare3 and dogowner')
 
 
 @pytest.mark.django_db()
