@@ -52,6 +52,24 @@ class TestLoginView:
         response = client.post('/login/', form, follow=True)
         assert response.wsgi_request.user.is_anonymous
 
+    def test_valid_login_daycare_user_info(self, client, create_daycare_user):
+        previous_logged_user = client.get('/').wsgi_request.user
+        form = {'username': 'testuser01',
+                'password': 'pass',
+                }
+
+        response = client.post('/login/', form, follow=True)
+        current_log_user = response.wsgi_request.user
+        assert current_log_user == create_daycare_user.user
+        assert previous_logged_user != current_log_user
+
+    def test_invalid_login_daycare_user_info(self, client):
+        form = {'username': "daycare@address.com",
+                'password': "incorrect",
+                }
+        response = client.post('/login/', form, follow=True)
+        assert response.wsgi_request.user.is_anonymous
+
     def test_block_logged_user_from_login_page(self, client, create_dog_owner_user):
         client.force_login(user=create_dog_owner_user.user)
         response = client.get("/login/")
@@ -75,8 +93,8 @@ class TestIndexView:
         assert response.status_code == 302
         assert response['Location'] == '/login/'
 
-    def test_root_entrypoint_redirection_logged_user(self, client, create_dog_owner_user):
-        client.force_login(user=create_dog_owner_user.user)
+    def test_root_entrypoint_redirection_logged_daycare_user(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
         response = client.get("/")
         assert response.status_code == 302
         assert response['Location'] == '/homepage/'

@@ -1,5 +1,5 @@
 import pytest
-from .models import DayCare, Image
+from daycare.models import DayCare, Image
 
 
 @pytest.fixture
