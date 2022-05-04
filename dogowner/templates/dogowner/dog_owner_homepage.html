@@ -1,0 +1,26 @@
+{% extends "main/base_template.html" %}
+{% load static %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'CSS/dog_owner_homepage.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row row-cols-1 g-3 cards">
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+    {% for daycare in daycares %}
+    <div class="card">
+      <img src="{{ daycare.get_daycare_primary_image_url }}" alt="{{ daycare.name }} image" class="card-img-top">
+      <div class="card-body">
+        <div style="display: flex; flex-direction: row">
+          <h5 class="card-title">{{ daycare.name }}</h5>
+        </div>
+        <p class="card-text">{{ daycare.description | truncatechars:250 }}</p>
+        <a href="/daycare/{{ daycare.id }}" class="btn btn-primary">Daycare Profile</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

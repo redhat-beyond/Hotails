@@ -40,8 +40,7 @@ class DayCare(models.Model):
         validate_max_length(address, 50, "address")
         validate_price(price_per_day)
 
-        new_daycare = DayCare(user=User.objects.create_user(email=email, username=username, password=password,
-                                                            ),
+        new_daycare = DayCare(user=User.objects.create_user(email=email, username=username, password=password),
                               name=name, description=description, price_per_day=price_per_day,
                               capacity=capacity, area=area, city=city, address=address)
 
@@ -49,6 +48,12 @@ class DayCare(models.Model):
         new_daycare.save()
 
         return new_daycare
+
+    def get_daycare_primary_image_url(self):
+        daycare_images = Image.get_images_by_daycare_id(daycare_id=self.id)
+        if daycare_images is not None and daycare_images.first() is not None:
+            return daycare_images.first().url
+        return "../../static/images/daycare-default-profile-image.jpeg"
 
 
 class Image(models.Model):
