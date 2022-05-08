@@ -26,5 +26,6 @@ urlpatterns = [
     path('homepage/', views.homepage, name='homepage'),
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
+    path('visit_daycare_home/<int:daycare_id>', views.visit_daycare_home, name='visit_daycare_home'),
     path('orders/', views.orders_view, name='orders'),
 ]

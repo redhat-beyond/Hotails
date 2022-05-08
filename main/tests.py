@@ -85,6 +85,7 @@ class TestIndexView:
         assert response['Location'] == '/homepage/'
 
 
+@pytest.mark.django_db
 class TestHomepageView:
     def test_unlogged_user_access_to_homepage(self, client):
         response = client.get("/homepage/")

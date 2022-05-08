@@ -1,11 +1,12 @@
 {% extends "main/base_template.html" %}
-
+{% load crispy_forms_tags %}
 {% block stylesheets %}
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
   <style>
   /* Make the image fully responsive */
 .img {
@@ -23,6 +24,7 @@
       <div class="col-md-7">
         <hr>
         <div class="mt-5 mb-5">
+        {% if visited_user == 'daycare' %}
           <h5> <i class="fas fa-user"></i> Hello {{ daycare.name }}</h5>
           <h6>This is where you can manage your daycare.
             <br> You will be able:</h6>
@@ -30,10 +32,19 @@
            <p class="text-muted"># Set filters of approved dogs and services you provide</p>
            <p class="text-muted"># Read / write reviews of dog owners and their dogs</p>
            <p class="text-muted"># Chat with dog owners</p>
+        {% elif visited_user == 'dogowner' %}
+             <h5> <i class="fas fa-user"></i> Welcome to {{ daycare.name }}</h5>
+          <h6>This is where you can book an order for {{ daycare.name }} daycare
+            <br> You will be able:</h6>
+          <p class="text-muted"># Look at the details of the daycare</p>
+           <p class="text-muted"># Read / write reviews of the daycare</p>
+           <p class="text-muted"># Chat with the daycare owners</p>
+         {%  endif %}
         </div>
         <hr>
         <div class="mt-5">
           <h5>Have a look at your reviews</h5>
+        <div style="height: 1500px;overflow: scroll;">
           <table class="table table-hover table-bordered table-responsive">
             <thead class="table-dark">
             <tr>
@@ -56,6 +67,7 @@
             {% endfor %}
             </tbody>
           </table>
+         </div>
 
         </div>
       </div>
@@ -115,11 +127,45 @@
                 <h6><i class="fas fa-dog"></i> Capacity: {{daycare.capacity}}
                   <br>
                   <br>
-                  <i class="fas fa-coins"></i> Price: {{daycare.price_per_day}}
+                  <i class="fas fa-coins"></i> Price Per Night: {{daycare.price_per_day}}
                 </h6>
                 <br>
                 <h6><strong>About</strong></h6>
                 <p class="card-text">{{daycare.description}}</p>
+    {% if visited_user == 'dogowner' %}
+
+    <form method='POST' action=''>{% csrf_token %}
+        <div class="col-4" id="searchBoxArea">
+        <h2>Book now</h2>
+               <div class="form-group">
+                  {{ form.dog_name|as_crispy_field }}
+                </div>
+                <div class="form-group">
+                  {{ form.email|as_crispy_field }}
+              </div>
+              <div class="form-group">
+                  {{ form.start_date|as_crispy_field }}
+              </div>
+              <div class="form-group">
+                {{ form.end_date|as_crispy_field }}
+              </div>
+              <div class="form-group">
+                {{ form.requests|as_crispy_field }}
+              </div>
+              <div class="form-group">
+                {{ form.agree_terms|as_crispy_field }}
+              </div>
+                <button type="submit" class="btn btn-primary">Complete Booking</button>
+            </div>
+            <br>
+    {% if order == 'No Capacity' %}
+    <h6>Failed: Your order could not be submit, there is no space available on the dates specified, please try again</h6>
+   {%  elif order != 'null' %}
+         <h6>Your order has been successfully received and waiting for {{ daycare.name }} to approve</h6>
+         <p class="text-muted">You can see the details of the reservation <a href="{% url 'orders' %}">here</a></p>
+    {% endif %}
+        </form>
+   {% endif %}
               </div>
             </div>
           </div>

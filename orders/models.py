@@ -107,12 +107,13 @@ class Order(models.Model):
 
         return capacity_per_day
 
-    def are_order_dates_available(self):
-        capacity_per_day: list[int] = self.get_capacity_of_daycare_in_dates_range(self.daycare_id,
-                                                                                  self.start_date,
-                                                                                  self.end_date)
+    @staticmethod
+    def are_order_dates_available(daycare_id, start_date, end_date):
+        capacity_per_day: list[int] = Order.get_capacity_of_daycare_in_dates_range(daycare_id,
+                                                                                   start_date,
+                                                                                   end_date)
 
-        daycare_capacity = DayCare.objects.get(name=self.daycare_id.name).capacity
+        daycare_capacity = DayCare.objects.get(pk=daycare_id).capacity
         return all(current_capacity < daycare_capacity for current_capacity in capacity_per_day)
 
     def is_the_order_cancelable(self):
@@ -120,38 +121,3 @@ class Order(models.Model):
 
     def is_the_order_approvable(self):
         return self.status == StatusOptions.Pending and self.are_order_dates_available()
-
-    @staticmethod
-    def get_capacity_of_daycare_in_dates_range(daycare_id, start_date, end_date):
-        relevant_orders = Order.objects.filter(daycare_id=daycare_id, status__in=['A', 'O'])
-        start_date = datetime.date(year=start_date.year, month=start_date.month, day=start_date.day)
-        end_date = datetime.date(year=end_date.year, month=end_date.month, day=end_date.day)
-        capacity_per_day_list = [0] * ((end_date - start_date).days + 2)
-
-        for order in relevant_orders:
-            if end_date < order.start_date or order.end_date < start_date:
-                continue
-
-            number_of_days = (order.end_date - order.start_date).days
-
-            for day in range(number_of_days):
-                current_date = order.start_date + datetime.timedelta(days=day)
-                if current_date < start_date:
-                    continue
-                elif current_date > end_date:
-                    break
-                else:
-                    capacity_per_day_list[day] = capacity_per_day_list[day] + 1
-
-        return capacity_per_day_list
-
-    @staticmethod
-    def get_all_day_cares_available_on_dates(start_date: str, end_date: str) -> QuerySet:
-        start_date = datetime.date.fromisoformat(start_date)
-        end_date = datetime.date.fromisoformat(end_date)
-        id_list = []
-        for day_care in DayCare.objects.all():
-            capacity_per_day_list = Order.get_capacity_of_daycare_in_dates_range(day_care.id, start_date, end_date)
-            if all(current_capacity < day_care.capacity for current_capacity in capacity_per_day_list):
-                id_list.append(day_care.id)
-        return DayCare.objects.filter(id__in=id_list)

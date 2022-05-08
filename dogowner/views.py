@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from daycare.models import DayCare
+from daycare.views import daycare_home
 from daycare.forms import DayCareSearchForm
 from orders.models import Order
 
@@ -25,8 +26,10 @@ def dog_owner_home(request):
             day_care_queryset = filter_day_cares.intersection(available_day_cares)
 
             context = {
+                'dog-owner': request.user.dogowner,
                 'day_care_queryset': day_care_queryset,
                 'form': form
             }
 
     return render(request, 'dogowner/dog_owner_homepage.html', context)
+
