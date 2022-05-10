@@ -71,7 +71,7 @@ class TestDaycareModel:
         assert response.status_code == 302
         assert response['Location'] == '/homepage/'
 
-    def test_relevant_daycare_homepage_with_static_data(self, client, create_daycare_user):
+    def test_relevant_daycare_homepage_with_static_data(self, client):
         dayCare = random.choice([daycare for daycare in DayCare.objects.all() if 'static' in daycare.user.username])
         client.force_login(user=dayCare.user)
 
@@ -87,3 +87,7 @@ class TestDaycareModel:
         reviews_shown_in_homepage = set(response.context['reviews'])
         daycare_reviews = set(Review.get_review_by_daycare_id(daycare_id=dayCare.id))
         assert reviews_shown_in_homepage == daycare_reviews
+
+        average_rating_in_homepage = response.context['rating']
+        average_rating = Review.get_average_rating_by_daycare_id(daycare_id=dayCare.id)
+        assert average_rating_in_homepage == average_rating

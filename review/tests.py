@@ -46,3 +46,25 @@ class TestReviewModel:
         assert len(reviews_by_id_list) == number_of_reviews
         for position, review in enumerate(reviews_by_id_list):
             assert review == review_list[position]
+
+    @pytest.mark.parametrize('daycare_id, expected_rating', [(1, 2), (2, 4.67)])
+    def test_get_average_rating_for_test_data(self, daycare_id, expected_rating):
+        average_rating = Review.get_average_rating_by_daycare_id(daycare_id)
+
+        assert expected_rating == average_rating
+
+    def test_get_average_rating_for_invalid_daycare(self):
+        average_rating = Review.get_average_rating_by_daycare_id(-1)
+
+        assert 0 == average_rating
+
+    @pytest.mark.parametrize('number_of_reviews, rating', [(100, 1), (50, 2), (500, 3), (7, 4), (10, 5)])
+    def test_get_average_rating_by_daycare_id(self, number_of_reviews, rating, create_dog_owner_user,
+                                              create_daycare_user):
+        [Review.create(review='review', rating=rating, daycare_id=create_daycare_user.id,
+                       dogowner_id=create_dog_owner_user.id)
+         for _ in range(number_of_reviews)]
+
+        average_rating = Review.get_average_rating_by_daycare_id(create_daycare_user.id)
+
+        assert rating == average_rating
