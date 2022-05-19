@@ -1,5 +1,7 @@
 import pytest
+from dogowner.models import DogOwner
 from daycare.models import DayCare
+from orders.models import Order
 
 
 @pytest.mark.django_db
@@ -72,8 +74,66 @@ class TestHomepageView:
         assert response.status_code == 302
         assert response['Location'] == '/login/?next=/homepage/'
 
-    def test_dog_owner_homepage_is_visible_for_dog_owner(self, client, create_dog_owner_user):
+
+@pytest.mark.django_db
+class TestDogOwnerHomePageView:
+    def test_dog_owner_homepage_present_all_daycares(self, client, create_dog_owner_user):
         client.force_login(user=create_dog_owner_user.user)
         response = client.get("/homepage/")
         assert response.status_code == 200
-        assert list(response.context['daycares']) == list(DayCare.objects.all())
+        assert set(response.context['day_care_queryset']) == set(DayCare.objects.all())
+
+    def test_daycare_not_appears_in_search_after_reduce_capacity_on_dates_to_0(self, client,
+                                                                               create_dog_owner_user,
+                                                                               create_daycare_user):
+        search_form = {'area': "",
+                       'city': "",
+                       'price_per_day': 100,
+                       'name': "",
+                       'start_date': "2022-05-03",
+                       'end_date': "2022-05-08",
+                       }
+        daycare_user = create_daycare_user
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.post('/homepage/', search_form, follow=True)
+        day_care_queryset = response.context['day_care_queryset']
+        assert daycare_user in day_care_queryset
+
+        for _ in range(daycare_user.capacity):
+            Order.create(dog_owner_id=DogOwner.objects.get(id=1), daycare_id=daycare_user,
+                         start_date="2022-05-02", end_date="2022-08-02", price_per_day=100).approve_order()
+        response = client.post('/homepage/', search_form, follow=True)
+        assert daycare_user not in response.context['day_care_queryset']
+
+    def test_successful_dog_owner_search_for_day_care(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        search_form = {'area': "C",
+                       'city': "tel aviv",
+                       'price_per_day': 800,
+                       'name': "",
+                       'start_date': "2022-05-03",
+                       'end_date': "2022-05-08",
+                       }
+        response = client.post('/homepage/', search_form, follow=True)
+        day_care_queryset = response.context['day_care_queryset']
+        available_day_cares = Order.get_all_day_cares_available_on_dates("2022-05-03", "2022-05-08")
+        filter_day_cares = DayCare.objects.filter(area__startswith='C',
+                                                  city__icontains="tel aviv",
+                                                  price_per_day__lte=800)
+        expected_queryset = available_day_cares.intersection(filter_day_cares)
+        assert set(day_care_queryset) == set(expected_queryset)
+
+    def test_search_for_day_care_with_start_date_greater_than_end_date_show_error_and_present_all_daycares(
+            self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        search_form = {'area': "C",
+                       'city': "tel aviv",
+                       'price_per_day': 800,
+                       'name': "",
+                       'start_date': "2022-05-03",
+                       'end_date': "2022-05-01",
+                       }
+        response = client.post('/homepage/', search_form, follow=True)
+        day_care_queryset = response.context['day_care_queryset']
+        assert set(day_care_queryset) == set(DayCare.objects.all())
+        assert response.context['form']._errors['end_date']

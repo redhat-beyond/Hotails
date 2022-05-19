@@ -52,3 +52,24 @@ class TestOrderModel:
     def test_daycare_id_is_deleted_when_daycare_is_deleted(self, create_order):
         DayCare.objects.get(id=1).delete()
         assert Order.objects.get(id=create_order.id).daycare_id is None
+
+    @pytest.mark.parametrize('start_date, end_date',
+                             [
+                                 ("2022-05-02", "2022-08-02"),
+                             ])
+    def test_day_care_available_on_dates_appears_in_available_day_cares_queryset(self, create_daycare_user,
+                                                                                 start_date, end_date):
+        day_care_user = create_daycare_user
+        assert day_care_user in Order.get_all_day_cares_available_on_dates(start_date, end_date)
+
+    @pytest.mark.parametrize('start_date, end_date',
+                             [
+                                 ("2022-05-02", "2022-08-02"),
+                             ])
+    def test_day_care_not_available_on_dates_not_appears_in_available_day_cares_queryset(self, create_daycare_user,
+                                                                                         start_date, end_date):
+        day_care_user = create_daycare_user
+        for _ in range(day_care_user.capacity):
+            Order.create(dog_owner_id=DogOwner.objects.get(id=1), daycare_id=day_care_user,
+                         start_date=start_date, end_date=end_date, price_per_day=500).approve_order()
+        assert day_care_user not in Order.get_all_day_cares_available_on_dates(start_date, end_date)
