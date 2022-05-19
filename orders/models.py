@@ -30,14 +30,14 @@ class Order(models.Model):
         return f"Dog owner ID: {self.dog_owner_id}, daycare ID: {self.daycare_id}, status: {self.status}"
 
     @classmethod
-    def create(cls, dog_owner_id, daycare_id, start_date, end_date, price_per_day):
+    def create(cls, dog_owner_id, daycare_id, start_date, end_date, price_per_day, status=StatusOptions.Pending):
         new_order = Order(dog_owner_id=dog_owner_id,
                           daycare_id=daycare_id,
                           book_date=timezone.now(),
                           start_date=start_date,
                           end_date=end_date,
                           price_per_day=price_per_day,
-                          status=StatusOptions.Pending
+                          status=status
                           )
 
         new_order.save()
