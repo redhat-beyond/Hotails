@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
+import orders.views
 from main import views
 from django.contrib.auth import views as auth_views
 
@@ -26,4 +28,5 @@ urlpatterns = [
     path('homepage/', views.homepage, name='homepage'),
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
+    path('orders/', orders.views.orders, name='orders'),
 ]
