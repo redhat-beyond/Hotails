@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from .validators import ValidateDogOwner, MaxLength
 
 
+DOG_OWNER_DEFAULT_PROFILE_PICTURE_URL = "../../static/images/dog-owner-default-profile-picture.jpeg"
+
+
 class Gender(models.TextChoices):
     Male = 'M', 'Male'
     Female = 'F', 'Female'
@@ -32,7 +35,6 @@ class DogOwner(models.Model):
                first_name, last_name, phone_number,
                dog_race, dog_picture_url, dog_age,
                dog_weight, dog_gender):
-
         ValidateDogOwner(email, username, password, dog_name,
                          first_name, last_name, phone_number,
                          dog_race, dog_picture_url, dog_age,
@@ -56,3 +58,6 @@ class DogOwner(models.Model):
         new_dog_owner.user.save()
         new_dog_owner.save()
         return new_dog_owner
+
+    def get_dog_owner_profile_image_url(self):
+        return self.dog_picture_url if self.dog_picture_url else DOG_OWNER_DEFAULT_PROFILE_PICTURE_URL

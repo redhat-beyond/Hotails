@@ -76,4 +76,25 @@ class TestHomepageView:
         client.force_login(user=create_dog_owner_user.user)
         response = client.get("/homepage/")
         assert response.status_code == 200
-        assert list(response.context['daycares']) == list(DayCare.objects.all())
+        list_of_daycares_from_response = list(response.context['daycares'])
+        list_of_all_daycares = list(DayCare.objects.all())
+        assert list_of_daycares_from_response == list_of_all_daycares
+
+
+@pytest.mark.django_db
+class TestNavbarView:
+    def test_navbar_getting_dog_owner_nickname_and_profile_picture(self, client, create_dog_owner_user):
+        client.force_login(user=create_dog_owner_user.user)
+        response = client.get("/homepage/")
+        dog_owner_picture_url = create_dog_owner_user.dog_picture_url
+        assert response.context['navbar_picture_url'] == dog_owner_picture_url
+        dog_owner_name = create_dog_owner_user.__str__()
+        assert response.context['navbar_name'] == dog_owner_name
+
+    def test_navbar_getting_daycare_nickname_and_profile_picture(self, client, create_daycare_user):
+        client.force_login(user=create_daycare_user.user)
+        response = client.get("/homepage/")
+        daycare_name = create_daycare_user.name
+        assert response.context['navbar_name'] == daycare_name
+        daycare_primary_image_url = create_daycare_user.get_daycare_primary_image_url()
+        assert response.context['navbar_picture_url'] == daycare_primary_image_url

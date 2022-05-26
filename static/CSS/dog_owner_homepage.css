@@ -11,8 +11,9 @@
 .row
 {
     height: 30rem;
-    width: 120rem;
-    margin-left: 200px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card
