@@ -8,6 +8,11 @@ from orders.models import Order
 from review.models import Review
 
 
+DOG_OWNER_FIXTURE_PROFILE_PICTURE_URL = "https://www.akc.org/wp-content/uploads/2019/06/Bohemian-Shepherd.1.jpg"
+DAYCARE_FIXTURE_PROFILE_PICTURE_URL_1 = "../../static/images/daycare_image_test_01.jpeg"
+DAYCARE_FIXTURE_PROFILE_PICTURE_URL_2 = "../../static/images/daycare_image_test_02.jpeg"
+
+
 @pytest.fixture
 def create_order():
     return Order.create(dog_owner_id=DogOwner.objects.get(id=1),
@@ -60,7 +65,7 @@ def create_dog_owner_user():
                            last_name='USER',
                            phone_number=1234567890,
                            dog_race='lavrador',
-                           dog_picture_url="https://www.akc.org/wp-content/uploads/2019/06/Bohemian-Shepherd.1.jpg",
+                           dog_picture_url=DOG_OWNER_FIXTURE_PROFILE_PICTURE_URL,
                            dog_age=10,
                            dog_weight=6,
                            dog_gender='M'
@@ -90,12 +95,12 @@ def create_daycare_user(daycare_data):
 
 @pytest.fixture
 def create_image1(create_daycare_user):
-    return Image.create(url="../../static/images/daycare_image_test_01.jpeg", daycare_id=create_daycare_user)
+    return Image.create(url=DAYCARE_FIXTURE_PROFILE_PICTURE_URL_1, daycare_id=create_daycare_user)
 
 
 @pytest.fixture
 def create_image2(create_daycare_user):
-    return Image.create(url="../../static/images/daycare_image_test_02.jpeg", daycare_id=create_daycare_user)
+    return Image.create(url=DAYCARE_FIXTURE_PROFILE_PICTURE_URL_2, daycare_id=create_daycare_user)
 
 
 @pytest.fixture

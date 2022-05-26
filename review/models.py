@@ -27,3 +27,10 @@ class Review(models.Model):
             return Review.objects.filter(daycare_id=daycare_id)
         except ObjectDoesNotExist:
             return None
+
+    @staticmethod
+    def get_average_rating_by_daycare_id(daycare_id):
+        reviews = Review.get_review_by_daycare_id(daycare_id)
+        if reviews.exists():
+            return float("{:.2f}".format(reviews.aggregate(models.Avg('rating'))['rating__avg']))
+        return 0

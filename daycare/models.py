@@ -10,6 +10,9 @@ from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ObjectDoesNotExist
 
 
+DAYCARE_DEFAULT_PICTURE_URL = "../../static/images/daycare-default-profile-image.jpeg"
+
+
 class DayCare(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None, blank=True, null=False, editable=True)
     name = models.CharField(max_length=20, blank=True, unique=True, validators=[MaxLengthValidator])
@@ -53,7 +56,7 @@ class DayCare(models.Model):
         daycare_images = Image.get_images_by_daycare_id(daycare_id=self.id)
         if daycare_images is not None and daycare_images.first() is not None:
             return daycare_images.first().url
-        return "../../static/images/daycare-default-profile-image.jpeg"
+        return DAYCARE_DEFAULT_PICTURE_URL
 
 
 class Image(models.Model):
