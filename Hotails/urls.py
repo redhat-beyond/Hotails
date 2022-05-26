@@ -26,4 +26,6 @@ urlpatterns = [
     path('homepage/', views.homepage, name='homepage'),
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
+    path('messages/', views.messages_view, name='messages'),
+    path('chat/<contact>', views.chat_view, name='chat'),
 ]
